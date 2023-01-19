@@ -1,38 +1,34 @@
 package work.blackbe.mirai.utils;
 
-import java.io.BufferedReader;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.BasicHttpClientResponseHandler;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Network {
-    public static String sendGetRequest(String urls, HashMap<String, Object> map) throws Exception {
+    public static String sendGetRequest(String url, HashMap<String, Object> map) {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        String response = null;
+        HttpGet httpGet = new HttpGet(url);
+
+        map.forEach(httpGet::setHeader);
+
         try {
-            URL url = new URL(urls);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            for (Map.Entry item : map.entrySet()) {
-                connection.setRequestProperty(item.getKey().toString(),item.getValue().toString());//设置header
-            }
-            InputStream in = connection.getInputStream();
-            InputStreamReader isr = new InputStreamReader(in, StandardCharsets.UTF_8);
-            BufferedReader br = new BufferedReader(isr);
-            String line;
-            StringBuilder sb = new StringBuilder();
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-            br.close();
-            isr.close();
-            in.close();
-            return sb.toString();
-        } catch (IOException e) {
+            BasicHttpClientResponseHandler handler = new BasicHttpClientResponseHandler();
+            response = httpClient.execute(httpGet, handler);
+            httpClient.close();
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return response;
     }
 }
