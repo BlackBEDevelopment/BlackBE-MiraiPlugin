@@ -26,9 +26,6 @@ public class Placeholder {
             libSource = "公开库";
         } else {
             String token = Config.INSTANCE.getToken();
-            if (!token.equals("")) {
-
-            }
 
             try {
                 List<Repository> repositories;

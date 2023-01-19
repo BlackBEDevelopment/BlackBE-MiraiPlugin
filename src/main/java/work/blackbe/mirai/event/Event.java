@@ -32,7 +32,7 @@ public class Event {
 
                 HashMap<String, Object> header = new HashMap<>();
                 if (!Config.INSTANCE.getToken().equals("")) {
-                    header.put("Authorization", "Bearer "+Config.INSTANCE.getToken());
+                    header.put("Authorization", "Bearer " + Config.INSTANCE.getToken());
                 }
 
                 String request = Global.ADDRESS.concat("check?").concat(param);
