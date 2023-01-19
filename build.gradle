@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'work.blackbe.mirai'
-version = '3.0.0'
+version = '3.0.1'
 
 repositories {
     maven { url 'https://maven.aliyun.com/repository/public' }
@@ -19,5 +19,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.10.0'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 
 }
