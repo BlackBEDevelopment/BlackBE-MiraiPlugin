@@ -25,23 +25,23 @@ public class Placeholder {
         if (info.black_id.equals("1")) {
             libSource = "公开库";
         } else {
-            HashMap<String, Object> header = new HashMap<>();
             String token = Config.INSTANCE.getToken();
             if (!token.equals("")) {
-                header.put("Authorization", "Bearer "+token);
+
             }
 
             try {
                 List<Repository> repositories;
-                if (Global.REPOSITORIES_LIST.containsKey(token)) {
-                    repositories = Global.REPOSITORIES_LIST.get(token);
-                } else {
-                    String result = Network.sendGetRequest(Global.API_PRIVATE_REPOSITORIES_LIST, header);
-                    Response response = Global.GSON.fromJson(result, Response.class);
-                    if (Global.REPOSITORIES_LIST.containsKey(token)) {
-                        Global.REPOSITORIES_LIST.put(token, response.data.repositoriesList);
+                if (Global.REPOSITORIES_RESPONSE_LIST.containsKey(token)) {
+                    Response response = Global.REPOSITORIES_RESPONSE_LIST.get(token);
+                    boolean isOverdue = System.currentTimeMillis()/1000 - response.time > Global.TIME_OVERDUE;
+                    if (!isOverdue) {
+                        repositories = response.data.repositoriesList;
+                    } else {
+                        repositories = getRepositoriesWithOverdue(token);
                     }
-                    repositories = response.data.repositoriesList;
+                } else {
+                    repositories = getRepositoriesWithOverdue(token);
                 }
 
                 for (Repository repository : repositories) {
@@ -58,5 +58,17 @@ public class Placeholder {
         map.put("target", target);
 
         return map;
+    }
+
+    private static List<Repository> getRepositoriesWithOverdue(String token) throws Exception {
+        HashMap<String, Object> header = new HashMap<>();
+        header.put("Authorization", "Bearer " + token);
+
+        String result = Network.sendGetRequest(Global.API_PRIVATE_REPOSITORIES_LIST, header);
+        Response response = Global.GSON.fromJson(result, Response.class);
+        if (Global.REPOSITORIES_RESPONSE_LIST.containsKey(token)) {
+            Global.REPOSITORIES_RESPONSE_LIST.put(token, response);
+        }
+        return response.data.repositoriesList;
     }
 }

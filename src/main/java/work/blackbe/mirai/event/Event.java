@@ -15,7 +15,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Event {
-    public static Map<Long, Response> qqTemp = new HashMap<>();
 
     public static void subscribeEvent() {
         Message.addHandle(event -> {
@@ -53,12 +52,12 @@ public class Event {
 
         Message.addHandle(event -> {
             Long qq = event.getSender().getId();
-            if (!qqTemp.containsKey(qq)) {
+            if (!Global.RESPONSE_TEMP.containsKey(qq)) {
                 String param = String.format("qq=%s", qq);
 
                 HashMap<String, Object> header = new HashMap<>();
                 if (!Config.INSTANCE.getToken().equals("")) {
-                    header.put("Authorization", "Bearer "+Config.INSTANCE.getToken());
+                    header.put("Authorization", "Bearer " + Config.INSTANCE.getToken());
                 }
 
                 String request = Global.ADDRESS.concat("check?").concat(param);
@@ -74,7 +73,7 @@ public class Event {
                     BlackBE.INSTANCE.getLogger().error(e);
                 }
             } else {
-                qqTemp.get(qq).handle(event, Message.MessageType.CHAT, event.getSenderName());
+                Global.RESPONSE_TEMP.get(qq).handle(event, Message.MessageType.CHAT, event.getSenderName());
             }
         });
 
