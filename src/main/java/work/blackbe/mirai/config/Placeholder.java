@@ -29,8 +29,8 @@ public class Placeholder {
 
             try {
                 List<Repository> repositories;
-                if (Global.REPOSITORIES_RESPONSE_LIST.containsKey(token)) {
-                    Response response = Global.REPOSITORIES_RESPONSE_LIST.get(token);
+                if (Global.REPOSITORIES_RESPONSE_CACHE.containsKey(token)) {
+                    Response response = Global.REPOSITORIES_RESPONSE_CACHE.get(token);
                     boolean isOverdue = System.currentTimeMillis()/1000 - response.time > Global.TIME_OVERDUE;
                     if (!isOverdue) {
                         repositories = response.data.repositoriesList;
@@ -57,14 +57,14 @@ public class Placeholder {
         return map;
     }
 
-    private static List<Repository> getRepositoriesWithOverdue(String token) throws Exception {
+    private static List<Repository> getRepositoriesWithOverdue(String token) {
         HashMap<String, Object> header = new HashMap<>();
         header.put("Authorization", "Bearer " + token);
 
         String result = Network.sendGetRequest(Global.API_PRIVATE_REPOSITORIES_LIST, header);
         Response response = Global.GSON.fromJson(result, Response.class);
-        if (Global.REPOSITORIES_RESPONSE_LIST.containsKey(token)) {
-            Global.REPOSITORIES_RESPONSE_LIST.put(token, response);
+        if (Global.REPOSITORIES_RESPONSE_CACHE.containsKey(token)) {
+            Global.REPOSITORIES_RESPONSE_CACHE.put(token, response);
         }
         return response.data.repositoriesList;
     }

@@ -24,8 +24,8 @@ public class Response {
             case 2000:
                 for (Info info : data.info) {
                     boolean isOverdue = System.currentTimeMillis()/1000 - this.time > Global.TIME_OVERDUE;
-                    if (!Global.RESPONSE_TEMP.containsKey(info.qq) || isOverdue) {
-                        Global.RESPONSE_TEMP.put(info.qq, this);
+                    if (!Global.RESPONSE_CACHE.containsKey(info.qq) || isOverdue) {
+                        Global.RESPONSE_CACHE.put(info.qq, this);
                     }
                     Map<String, String> valMap = Placeholder.transfer(info, target);
                     StringSubstitutor sub = new StringSubstitutor(valMap);

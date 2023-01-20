@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,7 +51,7 @@ public class Event {
 
         Message.addHandle(event -> {
             Long qq = event.getSender().getId();
-            if (!Global.RESPONSE_TEMP.containsKey(qq)) {
+            if (!Global.RESPONSE_CACHE.containsKey(qq)) {
                 String param = String.format("qq=%s", qq);
 
                 HashMap<String, Object> header = new HashMap<>();
@@ -73,7 +72,7 @@ public class Event {
                     BlackBE.INSTANCE.getLogger().error(e);
                 }
             } else {
-                Global.RESPONSE_TEMP.get(qq).handle(event, Message.MessageType.CHAT, event.getSenderName());
+                Global.RESPONSE_CACHE.get(qq).handle(event, Message.MessageType.CHAT, event.getSenderName());
             }
         });
 
