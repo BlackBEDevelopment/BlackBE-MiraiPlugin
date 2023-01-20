@@ -1,6 +1,6 @@
 package work.blackbe.mirai;
 
-import work.blackbe.mirai.command.ReloadConfig;
+import work.blackbe.mirai.command.BlackBECommand;
 import work.blackbe.mirai.config.Config;
 import work.blackbe.mirai.event.Event;
 import net.mamoe.mirai.console.command.CommandManager;
@@ -11,7 +11,7 @@ public final class BlackBE extends JavaPlugin {
     public static final BlackBE INSTANCE = new BlackBE();
 
     private BlackBE() {
-        super(new JvmPluginDescriptionBuilder("work.blackbe.mirai", "3.0.1")
+        super(new JvmPluginDescriptionBuilder("work.blackbe.mirai", "3.1.0")
                 .name("BlackBE")
                 .author("n0mad")
                 .build());
@@ -33,6 +33,6 @@ public final class BlackBE extends JavaPlugin {
         // 订阅事件
         Event.subscribeEvent();
 
-        CommandManager.INSTANCE.registerCommand(ReloadConfig.INSTANCE, true);
+        CommandManager.INSTANCE.registerCommand(BlackBECommand.INSTANCE, true);
     }
 }
