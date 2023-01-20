@@ -19,10 +19,12 @@ object BlackBECommand : CompositeCommand(BlackBE.INSTANCE, "blackbe") {
 
     @SubCommand("cache")
     suspend fun cache(context: CommandContext, arg: String) {
-        if (arg == "clear") {
-            Global.RESPONSE_CACHE.clear()
-            Global.REPOSITORIES_RESPONSE_CACHE.clear()
-            BlackBE.INSTANCE.logger.info("清除缓存成功")
+        if (context.sender is ConsoleCommandSender) {
+            if (arg == "clear") {
+                Global.RESPONSE_CACHE.clear()
+                Global.REPOSITORIES_RESPONSE_CACHE.clear()
+                BlackBE.INSTANCE.logger.info("清除缓存成功")
+            }
         }
     }
 }
